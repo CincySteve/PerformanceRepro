@@ -1,0 +1,46 @@
+﻿@page "/"
+
+<h1>Hello, world!</h1>
+
+Welcome to your new app.
+
+<SurveyPrompt Title="How is Blazor working for you?" />
+
+<br />
+<button class="btn btn-primary" @onclick="Button_Calculate">Calculate</button>
+<hr />
+
+@CalcTime
+
+@code
+{  
+    private string CalcTime { get; set; } = string.Empty;
+
+    protected override void OnAfterRender(bool firstRender)
+        {
+        base.OnAfterRender(firstRender);
+
+        X_.CalcCtlr = new BOCalcCtlr();
+
+        // Instantiate the Business Objects the Calc Ctlr invokes
+        X_.BOList = new List<BOBase>();
+        X_.BOList.Add(new BOCalc1("BO1-1"));
+        X_.BOList.Add(new BOCalc1("BO1-2"));
+        X_.BOList.Add(new BOCalc1("BO1-3"));
+        X_.BOList.Add(new BOCalc1("BO1-4"));
+        X_.BOList.Add(new BOCalc1("BO1-5"));
+        X_.BOList.Add(new BOCalc1("BO1-6"));
+        X_.BOList.Add(new BOCalc2("BO2-1"));
+        X_.BOList.Add(new BOCalc2("BO2-2"));
+        X_.BOList.Add(new BOCalc2("BO2-3"));
+
+        // Create the Results Table with columns created and used by each of the BOs
+        X_.ResultsTable = new System.Data.DataTable();
+        foreach (BOBase bo in X_.BOList) bo.BOInit();
+        }
+
+    private void Button_Calculate()
+        {
+        CalcTime = string.Format("Calc Time = {0}ms", X_.CalcCtlr.CalcRun());
+        } // Button_Delete
+    }
