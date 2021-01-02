@@ -12,9 +12,5 @@ namespace PerformanceRepro
         public static List<BOBase> BOList;
 
         public static DataTable ResultsTable;
-        public static DataRow CurrRow;
-        public static DataRow PrevRow;
-
-        public static List<FedTaxBrackets> FedTaxBracketsList;
         }
     }

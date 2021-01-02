@@ -12,8 +12,7 @@ namespace PerformanceRepro
             {
             }
 
-        public BOCalc1(string bbName)
-            : base(bbName)
+        public BOCalc1(string bbName) : base(bbName)
             {
             BOName = BOName;
             }
@@ -21,8 +20,6 @@ namespace PerformanceRepro
         public override void BOInit()
             {
             ColNames = new string[] { BOName + "Col1", BOName + "Col2" };
-
-            // Cache universally used BO variables. 
             base.BOInit();
             }  // BOInit
 
@@ -30,26 +27,16 @@ namespace PerformanceRepro
             {
             base.Method1(rowIndex);
 
-            FedTaxBrackets fedBracket = X_.FedTaxBracketsList.Single(x => x.Year == 2019
-                && x.TaxFilingStatus == 0
-                && x.BracketStart == 0m
-                && x.BracketEnd == 9700m);
-
-            int colIndex = dtResults.Columns[ColNames[0]].Ordinal;
-            dtResults.Rows[rowIndex].ItemArray[colIndex] = rowIndex * 5m;
+            int colIndex = X_.ResultsTable.Columns[ColNames[0]].Ordinal;
+            X_.ResultsTable.Rows[rowIndex].ItemArray[colIndex] = rowIndex * 5m;
             }
 
         public override void Method2(int rowIndex)
             {
             base.Method2(rowIndex);
 
-            FedTaxBrackets fedBracket = X_.FedTaxBracketsList.Single(x => x.Year == 2019
-                && x.TaxFilingStatus == 0
-                && x.BracketStart == 0m
-                && x.BracketEnd == 9700m);
-
-            int colIndex = dtResults.Columns[ColNames[0]].Ordinal;
-            dtResults.Rows[rowIndex].ItemArray[colIndex] = rowIndex / 5m;
+            int colIndex = X_.ResultsTable.Columns[ColNames[0]].Ordinal;
+            X_.ResultsTable.Rows[rowIndex].ItemArray[colIndex] = rowIndex / 5m;
             }
         }
     }

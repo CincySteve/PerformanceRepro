@@ -11,16 +11,10 @@ namespace PerformanceRepro
     public class BOCalcCtlr
         {
         private int maxYear = 100;
-        private int maxRepeat = 10;
-
-        protected DataTable dtResults;     // Houses BO results, many of which are used across BOs.
-        protected DataRow drPrev;          // Previous Results table row
-        protected DataRow drCurr;          // Current Results table row
+        private int maxRepeat = 50;
 
         public BOCalcCtlr()
             {
-            // Cache shorthand references to commonly used variables
-            dtResults = X_.ResultsTable;
             }
 
         public long CalcRun()
@@ -29,20 +23,17 @@ namespace PerformanceRepro
             sw.Start();
             long startElapsedMs = sw.ElapsedMilliseconds;
 
-            // This is used to enable some Linq calls in the BO Methods
-            FedTaxBrackets_Load.Load();
-
+            // Zero the starting values in the Results Table
             for (int year = 0; year <= maxYear; year++)
                 {
-                X_.CurrRow = X_.ResultsTable.NewRow();
-                X_.ResultsTable.Rows.Add(X_.CurrRow);
+                DataRow currRow = X_.ResultsTable.NewRow();
+                X_.ResultsTable.Rows.Add(currRow);
 
                 for (int colIndex = 0; colIndex < X_.ResultsTable.Columns.Count; colIndex++)
-                    {
-                    X_.CurrRow.ItemArray[colIndex] = 0m;
-                    }
+                    currRow.ItemArray[colIndex] = 0m;
                 }  // next year
 
+            // Perform cpu-intensive calculations
             for (int repeat = 0; repeat < maxRepeat; repeat++)
                 {
                 for (int year = 0; year <= maxYear; year++)
